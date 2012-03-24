@@ -1,0 +1,287 @@
+<html>
+<head>
+</head>
+<body>
+ 
+<!--
+TODO:
+ 
+0) FADE Out when it's over, so it's loses the focus.
+ 
+1) NEEDS SOME SERIOUS REFACTORING
+ 
+2) Fix so slashes can be used instead of param...
+ 
+ 
+2) Think about a fun animation, like the sun going up, or something like that...?
+3) maybe a boat, or an airplane, and the sun goes down?
+ 
+think about using CSS transitions to set the gradients instead?
+CSS does seem to give us a lot more control, especially with modern breakpoints etc
+ 
+MVP1
+1) Count down timer for 25 min (test with seconds first) in popup
+ 
+ 
+MVP2: Cleaner code
+- Make an obj
+Timer.start()
+ 
+Timer.pause()
+timer.countdown() (or continue)
+timer.sleep()
+timer.increment()
+ 
+ 
+ 
+- convert to minutes and seconds in the countdown timer...
+ 
+- Use YUI 3, try out time functions, and custom events.
+ 
+2) Break for 5 min after (test with seconds first) in popup
+3) Figure out how to chain them properly, or use custom events...
+- Get it working with minutes.
+3) Figure out how to much timer to icon - DONE
+4) Add counter to icon (can this be done)?
+5) Decide whether to ship after MVP 1, 2
+ 
+ 
+MVP2:
+- conisder creating custom events for when timer is started, timer ends, break starts, etc. Custom events for when these things all fire.
+ 
+-->
+<!-- Experiment with Google Web Fonts -->
+ 
+<link href='http://fonts.googleapis.com/css?family=Droid+Serif&v2' rel='stylesheet' type='text/css'>
+ 
+ 
+<style type="text/css" media="screen">
+body{
+x    margin: 0 auto;
+        border: 10px solid rgba(0, 0, 0, .1);
+        background-color: #ddd59a;     
+        color: #fff;
+        margin: 0;
+        padding: 0;
+x       text-shadow: 0px 1px rgba(0, 0, 0, .8);
+}
+
+.timer_container{
+       
+        margin: 0 auto;
+        margin-top: 340px;
+        text-align: center;
+        width: 600px;
+}
+
+#timer{
+x       background-image: rgba(0, 0, 0 .5);
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 20px;
+        font-family: 'Droid Serif', Arial, Helvetica, sans-serif;
+        font-size: 172px;
+
+       
+        text-align: center;
+        padding: 20px 45px;
+        display: inline-block;
+
+}
+       
+#timer:hover{
+        background: rgba(0, 0, 0, 0.7);
+        cursor: pointer;
+        -webkit-transition: all .3s ease-in;
+}
+
+#timer.paused{
+        -webkit-animation-name: fadeInOut;
+        -webkit-animation-duration: 9s;
+        -webkit-animation-iteration-count: 100;
+        -webkit-animation-timing-function: ease-out;
+}
+
+/*#timer.paused{
+        -webkit-animation-name: pop;
+        -webkit-animation-duration: .5s;
+        -webkit-animation-iteration-count: 5;
+        -webkit-animation-timing-function: ease-in;
+}*/
+
+.start_color{
+        /* look at the body tag */
+}
+
+.end_color{
+x       color: #902f0c;
+        background-color: #902f0c;
+        /* transition-property: background-color;  Standard
+         transition-duration: 10s;      
+        transition: background-color 10s; */
+        -webkit-transition: all 30s linear;
+}
+
+.done{
+        background: transparent !important;
+        color: rgba(255, 255, 255, .1) !important;
+        -webkit-transition: all 3s linear;
+}
+
+
+.iteration_container{
+        background: rgba(0, 0, 0, 0.5);
+        border-top-left-radius: 10px;
+        color: #fff;
+        font-size: 16px;
+        line-height: 18px;
+        font-weight: bold;
+        /* height: 40px; */
+        float: right;
+        margin-right: 7px;
+        padding: 7px 10px;
+        padding-bottom: 10px;
+
+        /* width: 40px; */
+}
+
+.counter_reset_link{
+        color: white;
+        display: none;
+        margin-right: 15px;
+        text-decoration: none;
+}
+
+.active .counter_reset_link{
+        display: inline;       
+}
+
+.counter_reset_link:hover{
+        text-decoration: underline;    
+}
+
+.footer_bar{
+        bottom: 0;
+        position: fixed;
+        width: 100%;
+}
+
+.footer_links{
+        background: rgba(0, 0, 0, 0.5);
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+x       float: left;
+       
+x       right: 400px;
+        margin: 0 auto;
+        padding: 7px 10px;
+        opacity: .1;
+        text-align: center;
+        width: 280px;
+
+}
+
+.footer_links:hover{
+        opacity: 1;    
+        -webkit-transition: all .3s linear;
+}
+
+.footer_links a {
+        color: white;
+        font-family: Arial, Helvetica, sans-serif;
+        margin-right: 15px;
+        margin-left: 15px;
+}
+
+.footer_links a:hover{
+        color: #eee;
+        -webkit-transition: all 3s linear;     
+}
+
+
+#counter_reset {
+x       display: none;
+}
+
+.counter_reset_link{
+       
+}
+       
+       
+       
+@-webkit-keyframes pop {
+        from {
+                -webkit-transform: scale(.1);
+                opacity: 0;
+        }
+        85% {
+                -webkit-transform: scale(1.05);
+                opacity: 1;
+        }
+        to {
+                -webkit-transform: scale(1);
+        }
+}
+ 
+@-webkit-keyframes fadeInOut {
+        from {
+                opacity: .1;
+        }
+        5% {
+                opacity: 0.3;
+        }
+        25% {
+                opacity: 0.6;
+        }
+        35% {
+                opacity: 0.3;
+        }
+        50% {
+                opacity: 0.1;
+        }
+        85% {
+                opacity: 0.6;
+        }
+        95% {
+                opacity: 0.3;
+        }
+        to {
+                opacity: .1;
+        }
+}
+ 
+ 
+       
+</style>
+ 
+<div class="timer_container"><div id="timer"></div></div>
+ 
+ 
+ 
+<div class="footer_bar">
+       
+        <div class="iteration_container"><span id="counter_reset"><a class="counter_reset_link" href="javascript:;">Reset Counter</a></span><span id="iteration">0</span></div>
+       
+        <div class="footer_links">
+                <a href="?timer=25">Start Pomodoro</a>  <a href="?timer=5">Start Break</a>
+       
+        </div>
+ 
+       
+</div>
+ 
+ 
+<script src="includes/observer.js"></script>
+ 
+<script src="includes/timer.js"></script>
+<script type="text/javascript">
+        (function(){
+                //instantiate new timer
+                var pageTimer = new session.timer();
+                //fire it off
+                pageTimer.init();
+        })();
+</script>
+ 
+</body>
+</html>
+ 
