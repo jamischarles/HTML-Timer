@@ -29,7 +29,7 @@ session.timer = function(){
         var _current_time; //will contain the JS date of the current time (that is counting down)
        
         //default date obj value for time we're counting down to
-        var _target_time = new Date("now, 1975 12:00:00");
+        var _target_time = new Date("October 13, 1975 12:00:00");
        
         var _current_iteration = localStorage.getItem("j_timer_iteration") || 0;
        
