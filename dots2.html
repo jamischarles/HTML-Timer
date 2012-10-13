@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dot Timer</title>
+
+<style>
+	body{
+		background-color: #902f0c;
+		margin: 5px 0 0 5px;
+		padding: 0;
+	}
+
+	.el_container .count_item{
+		background-color: rgba(255, 255, 255, .21);
+		border-radius: 10px;
+		display: inline-block;
+		padding: 10px;
+		margin-right: 7px;
+		margin-bottom: 5px;
+		/*height: 5px;*/
+		/*width: 5px;*/
+		
+	}
+
+	.boom_container{
+	   
+		margin: 0 auto;
+		margin-top: 18%; /* was 340px */
+		text-align: center;
+		width: 600px;
+	}
+
+	#boom{
+	x 	background-image: rgba(0, 0, 0 .5);
+	x   background: rgba(0, 0, 0, 0.5);
+		border-radius: 20px;
+		color: #fff;
+		font-family: 'League Gothic', Arial, Helvetica, sans-serif;
+		font-size: 172px;
+
+	   
+		text-align: center;
+		padding: 20px 45px;
+		display: inline-block;
+
+	}
+
+	.timer_container{ display: none;}
+
+	#iteration_container{ display: none;}
+
+	.hidden{ display: none; }
+
+	/* Fonts */
+	@font-face {
+		font-family: 'League Gothic';
+		font-style: normal;
+		font-weight: normal;
+		src: local('League Gothic'),  url('webfonts/League_Gothic-webfont.woff') format('woff');
+	}
+
+</style>
+</head>
+<body>
+	<div class="boom_container hidden">
+		<div id="boom">BOOM!</div>
+	</div>
+
+	<div id="el_container" class="el_container">
+		
+
+	</div>
+
+	<!-- Empty el's I currently need simply so the JS doesn't break... -->
+	<div class="timer_container"><div id="timer" class="timer">12:05</div></div>
+
+	<div id="iteration_container"><div id="iteration"></div><div class="counter_reset_link"></div></div>
+
+
+<script src="includes/observer.js"></script>
+<script src="includes/timer.js"></script>
+
+<script>
+	//get amount of seconds from URL param, and figure out how many dots (1 per second)
+	var tempTimer = new session.timer(); //FIXME: I shouldn't need to create this and then throw it out like this...
+	var min = tempTimer.getUrlParam("timer"); //TODO: see if I should just use PHP to get this, rather than JS? think about it...
+
+	var sec = min * 60;
+
+
+	//create lots of child elements for HTML scaffolding
+
+	var container = document.getElementById('el_container');
+	for (var i = 0; i < sec - 1; i++) {
+		//optimize the injection
+		var newChild = document.createElement('div');
+		newChild.className = 'count_item';
+		
+		//TODO: move this out of loop. I know this is bad :).
+		container.appendChild(newChild);
+
+	};
+
+
+	//TODO: Have the timer.js create the nodes on the page if they don't exist? That's how jquery seems to handle it...
+	// makes it nice for testing as well...
+
+
+</script>
+
+
+	<script type="text/javascript">
+			function removeDots(){
+				//console.log('DOT');
+				var container = document.getElementById('el_container')
+				var nodeToRemove = container.lastChild;
+				container.removeChild(nodeToRemove);
+
+			}
+
+			function showBoom(){
+				document.getElementById('boom').parentNode.className = document.getElementById('boom').parentNode.className.replace("hidden", "")
+
+			}
+
+
+			(function(){
+					//instantiate new timer
+					var pageTimer = new session.timer();
+					
+					var cfg = {
+						callbacks: {
+							countdown: removeDots,
+							end: showBoom
+							//start: function(){ alert('start')}
+						}
+					}
+					//fire it off
+					pageTimer.init(cfg);
+			})();
+
+
+			//TODO: be able to pass in a callback that fires on each second, or subscribe to that method publicly or something...? How can I make those public, so I can subscribe to them?
+	</script>
+
+
+</body>
+</html>
